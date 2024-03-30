@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German Vocabulary Quiz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="startPage" class="container">
+        <h1>Welcome to German Vocabulary Quiz</h1>
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+    <div id="quizPage" class="container hidden">
+        <h1>German Vocabulary Quiz</h1>
+        <div id="question" class="question-container"></div>
+        <div id="customPopup" class="popup">
+            <span class="popup-content" id="popupMessage"></span>
+            <button class="close-btn" onclick="closePopup()">Cerrar</button>
+        </div>
+        <div id="good"></div>
+        <div id="bad"></div>
+        <div id="total"></div>
+    </div>
+    <script src="logic.js"></script>
+</body>
+</html>
