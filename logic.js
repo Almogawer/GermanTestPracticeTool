@@ -16,7 +16,7 @@ let words = {
     "Erdbeere": ["die", "strawberry"],
     "Milch": ["die", "milk"],
     "Zucker": ["der", "sugar"],
-    "das Keks": ["der/das", "biscuit"],
+    "Keks": ["der/das", "biscuit"],
     "Paprika": ["der", "pepper"],
     "Fleisch": ["das", "meat"],
     "Zwiebel": ["die", "onion"],
@@ -98,9 +98,9 @@ function displayQuestion() {
     questionDiv.innerHTML = `
         <p>Guess the article and the translation of this german word:</p>
         <p>${word}</p>
-        <input type="text" id="userArticle" placeholder="Article (die, der, das, der/das)">
-        <input type="text" id="userTranslation" placeholder="English translation (without caps)">
-        <button onclick="checkAnswerJaume('${word}')">Check answer</button>
+        <input type="text" id="userArticle" placeholder="Article (die, der, das)">
+        <input type="text" id="userTranslation" placeholder="English translation">
+        <p><button onclick="checkAnswerJaume('${word}')">Check answer</button><\p>
     `;
 }
 
