@@ -1,3 +1,9 @@
+
+let totalNotes = 0; // Variable to track total notes
+let bad = 0;
+let total = 0;
+let word = "Limonade";
+
 let words = {
     "Limonade": ["die", "lemonade"],
     "Wurst": ["die", "sausage"],
@@ -69,9 +75,16 @@ function getRandomWord() {
     };
 }
 
-let totalNotes = 0; // Variable to track total notes
-let bad = 0;
-let total = 0;
+function getOrderWord() {
+    let keys = Object.keys(words);
+    let randomKey = keys[total];
+    return {
+        word: randomKey,
+        details: words[randomKey]
+    };
+}
+
+
 
 function startQuiz() {
     document.getElementById("startPage").classList.add("hidden"); // Hide the start page
@@ -79,6 +92,31 @@ function startQuiz() {
     updateTotalNotes();
     displayQuestion();
     
+}
+
+function startQuiznormal() {
+    document.getElementById("startPage").classList.add("hidden"); // Hide the start page
+    document.getElementById("quizPage").classList.remove("hidden"); // Show the quiz page
+    updateTotalNotes();
+    displayQuestionOrder();
+    
+}
+
+function displayQuestionOrder() {
+    let randomWord = getOrderWord();
+    word = randomWord.word;
+    let details = randomWord.details;
+    let article = details[0];
+    let translation = details[1];
+    let questionDiv = document.getElementById("question");
+    questionDiv.innerHTML = `
+        <p>Guess the article and the translation of this german word:</p>
+        <p>${word}</p>
+        <input type="text" id="userArticle" placeholder="Article (die, der, das)">
+        <input type="text" id="userTranslation" placeholder="English translation">
+        <p><button onclick="checkAnswer('${word}')">Check answer</button><\p>
+    `;
+
 }
 
 
@@ -90,7 +128,7 @@ function updateTotalNotes() {
 
 function displayQuestion() {
     let randomWord = getRandomWord();
-    let word = randomWord.word;
+    word = randomWord.word;
     let details = randomWord.details;
     let article = details[0];
     let translation = details[1];
@@ -100,11 +138,11 @@ function displayQuestion() {
         <p>${word}</p>
         <input type="text" id="userArticle" placeholder="Article (die, der, das)">
         <input type="text" id="userTranslation" placeholder="English translation">
-        <p><button onclick="checkAnswerJaume('${word}')">Check answer</button><\p>
+        <p><button onclick="checkAnswer('${word}')">Check answer</button><\p>
     `;
 }
 
-function checkAnswerJaume(word) {
+function checkAnswer(word) {
     let userArticle = document.getElementById("userArticle").value.trim().toLowerCase();
     let userTranslation = document.getElementById("userTranslation").value.trim().toLowerCase();
     let answer = words[word];
@@ -116,7 +154,7 @@ function checkAnswerJaume(word) {
         showFeedback("Correct!", "success", userArticle, userTranslation, word);
         totalNotes++; // Increment total notes on correct answer
     } else if (isArticleCorrect && !isTranslationCorrect) {
-        showFeedback(`Partially incorrect. The article for '${word}' is '${userArticle}' correct! But the translation is incorrect.`, "warning", userArticle, userTranslation, word);
+        showFeedback(`Partially incorrect. The article for '${word}' is '${userArticle}' correct! But the translation is incorrect. The correct is '${answer[answer.length-1]}'`, "warning", userArticle, userTranslation, word);
         totalNotes += 0.5;
         bad += 0.5;
     } else if (!isArticleCorrect && isTranslationCorrect) {
@@ -125,37 +163,7 @@ function checkAnswerJaume(word) {
         bad += 0.5;
     } else {
         bad++;
-        showFeedback(`Incorrect. The article for '${word}' is '${answer[0]}' and the translation is '${answer[1]}'.`, "error", userArticle, userTranslation, word);
-    }
-    total++;
-    updateTotalNotes();
-
-    // Clear fields and display another question
-    document.getElementById("userArticle").value = "";
-    document.getElementById("userTranslation").value = "";
-    displayQuestion();
-}
-
-
-function checkAnswer(word) {
-    let userArticle = document.getElementById("userArticle").value.trim().toLowerCase();
-    let userTranslation = document.getElementById("userTranslation").value.trim().toLowerCase();
-    let answer = words[word];
-    if (userArticle === answer[0] && userTranslation === answer[1]) {
-        showFeedback("Correct!", "success", userArticle, userTranslation, word);
-        totalNotes++; // Increment total notes on correct answer
-        
-    } else if (userArticle === answer[0] && userTranslation !== answer[1]) {
-        showFeedback(`Partially incorrect. The article for '${word}' is '${answer[0]}' correct! But the translation is ${answer[1]}`, "warning", userArticle, userTranslation,word);
-        totalNotes+= 0.5;
-        bad+= 0.5;
-    } else if (userArticle !== answer[0] && userTranslation === answer[1]) {
-        showFeedback(`Partially incorrect. The article for '${word}' is not '${userArticle}' its '${answer[0]}'! But the translation is correct.`, "warning", userArticle, userTranslation,word);
-        totalNotes+=0.5;
-        bad+=0.5;
-    } else {
-        bad++;
-        showFeedback(`Incorrect. The article for '${word}' is '${answer[0]}' and the translation is '${answer[1]}'.`, "error", userArticle, userTranslation,word);
+        showFeedback(`Incorrect. The article for '${word}' is '${answer[0]}' and the translation is '${answer[answer.length-1]}'.`, "error", userArticle, userTranslation, word);
     }
     total++;
     updateTotalNotes();
@@ -184,5 +192,20 @@ function closePopup() {
     let popup = document.getElementById("customPopup");
     popup.style.display = "none";
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Add event listener for Enter key press
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            if (document.getElementById("customPopup").style.display === "block") {
+                closePopup();
+            } else {
+                checkAnswer(word);
+            }
+        }
+    });
+
+    displayQuestion();
+});
 
 displayQuestion();
