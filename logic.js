@@ -3,6 +3,8 @@ let totalNotes = 0; // Variable to track total notes
 let bad = 0;
 let total = 0;
 let word = "Limonade";
+let currentPosition = 0; // Variable global per fer el seguiment de la posició actual
+let order = 0;
 
 let words = {
     "Limonade": ["die", "lemonade"],
@@ -52,7 +54,8 @@ let words = {
     "Torte": ["die", "gateau"],
     "Nudel": ["die", "noodle"],
     "Cola": ["die", "cola"],
-    "Tomate = der Paradeiser": ["die", "tomato"],
+    "Tomaten": ["die", "tomato"],
+    "Paradeiser": ["der", "tomato"],
     "Eis": ["das", "ice cream"],
     "Energydrink": ["der", "energy drink"],
     "Gemüse": ["das", "vegetables"],
@@ -75,9 +78,11 @@ function getRandomWord() {
     };
 }
 
+
 function getOrderWord() {
     let keys = Object.keys(words);
-    let randomKey = keys[total];
+    let randomKey = keys[currentPosition];
+    currentPosition++; // Incrementa la posició per al proper ús
     return {
         word: randomKey,
         details: words[randomKey]
@@ -90,6 +95,7 @@ function startQuiz() {
     document.getElementById("startPage").classList.add("hidden"); // Hide the start page
     document.getElementById("quizPage").classList.remove("hidden"); // Show the quiz page
     updateTotalNotes();
+    order = 0;
     displayQuestion();
     
 }
@@ -98,6 +104,7 @@ function startQuiznormal() {
     document.getElementById("startPage").classList.add("hidden"); // Hide the start page
     document.getElementById("quizPage").classList.remove("hidden"); // Show the quiz page
     updateTotalNotes();
+    order = 1;
     displayQuestionOrder();
     
 }
@@ -171,7 +178,8 @@ function checkAnswer(word) {
     // Clear fields and display another question
     document.getElementById("userArticle").value = "";
     document.getElementById("userTranslation").value = "";
-    displayQuestion();
+    if(order===1) displayQuestionOrder();
+    else displayQuestion();
 }
 
 function showFeedback(message, type, userArticle, userTranslation, word) {
